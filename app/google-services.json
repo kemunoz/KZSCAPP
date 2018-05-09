@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "463967031678",
+    "firebase_url": "https://kzsc-3c2de.firebaseio.com",
+    "project_id": "kzsc-3c2de",
+    "storage_bucket": "kzsc-3c2de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463967031678:android:265a1925df83f54c",
+        "android_client_info": {
+          "package_name": "com.example.david.poop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463967031678-o98r8nvoptiaobqe2pfu1pgvvdedtnrq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDojIptwV1n-XM18Iz06TWUwgkZRnbMQEE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
