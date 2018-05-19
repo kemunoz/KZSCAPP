@@ -1,7 +1,10 @@
 package com.example.david.poop;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,134 +12,248 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.scaledrone.lib.Listener;
+import com.scaledrone.lib.Member;
+import com.scaledrone.lib.Room;
+import com.scaledrone.lib.RoomListener;
+import com.scaledrone.lib.Scaledrone;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by David on 4/20/2018.
  */
-public class ChatFragment extends Fragment implements View.OnClickListener {
-    private ImageButton btn_send_msg;
-    private EditText input_msg;
-    private TextView chat_conversation;
-    private String user_name;
-    private String name;
-    private DatabaseReference root;
-    private String temp_key;
+public class ChatFragment extends Fragment implements RoomListener {
+//    private ImageButton btn_send_msg;
+//    private EditText input_msg;
+//    private TextView chat_conversation;
+//    private String user_name;
+//    private String name;
+//    private DatabaseReference root;
+//    private String temp_key;
 
-    /*public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        root = FirebaseDatabase.getInstance().getReference().child("kzsc-3c2de");
-        btn_send_msg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Map<String, Object> map = new HashMap<String, Object>();
-                //temp_key = root.push().getKey();
-                //root.updateChildren(map);
+    private String channelID = "o7RXA1e4aPbMO6AI";
+    private String roomName = "observable-room";
+    private EditText editText;
+    private Scaledrone scaledrone;
+    private  MessageAdapter messageAdapter;
+    private ListView messagesView;
+    private ImageButton sendButton1;
 
-                DatabaseReference message_root =root.child(temp_key);
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("name", user_name);
-                map.put("msg", input_msg.getText().toString());
-
-                message_root.updateChildren(map);
-            }
-        });
-    */
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
-        btn_send_msg = (ImageButton) rootView.findViewById(R.id.imageButton);
-        input_msg = (EditText) rootView.findViewById(R.id.input_msg);
-        //chat_conversation = (TextView) rootView.findViewById(R.id.chat_conversation);
-       root = FirebaseDatabase.getInstance().getReference().child("kzsc-3c2de");
-      //btn_send_msg.setOnClickListener(new View.OnClickListener() {
-//          @Override
-//          public void onClick(View view) {
-//              Toast.makeText(getActivity(),"Message", Toast.LENGTH_SHORT).show();
-//          }
-//      });
-//        btn_send_msg.setOnClickListener(this);
-        btn_send_msg.setOnClickListener(new View.OnClickListener() {
+        editText = (EditText) rootView.findViewById(R.id.editText);
+        messagesView = (ListView)rootView.findViewById(R.id.messages_view);
+        MemberData data = new MemberData(getRandomName(), getRandomColor());
+        scaledrone = new Scaledrone(channelID, data);
+        sendButton1 = (ImageButton) rootView.findViewById(R.id.sendButton);
+        messageAdapter = new MessageAdapter(getActivity().getApplicationContext());
+        scaledrone.connect(new Listener() {
+            @Override
+            public void onOpen() {
+                Log.d("WTF","Scaledrone connection open");
+                // Since the MainActivity itself already implement RoomListener we can pass it as a target
+                scaledrone.subscribe(roomName, ChatFragment.this);
+            }
+
+            @Override
+            public void onOpenFailure(Exception ex) {
+                System.err.println(ex);
+            }
+
+            @Override
+            public void onFailure(Exception ex) {
+                System.err.println(ex);
+            }
+
+            @Override
+            public void onClosed(String reason) {
+                System.err.println(reason);
+            }
+        });
+        sendButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("key value", "blah");
-//                Map<String, Object> map = new HashMap<String, Object>();
-//                temp_key = root.push().getKey();
-//                root.updateChildren(map);
-
-               DatabaseReference message_root =root.child("kzsc-3c2de");
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("name", "kevin");
-                map.put("msg", input_msg.getText().toString());
-
-                root.updateChildren(map);
-
+                String message = editText.getText().toString();
+                if (message.length() > 0) {
+                    Log.d("in if","david");
+                    scaledrone.publish("observable-room", message);
+                    editText.getText().clear();
+                }
             }
         });
 
-
-            //Log.d("key value", "blah");
-
-        //request_user_name();
-//        btn_send_msg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                OnClick(v);
-//            }
-
-
-        //});
-
-       // return inflater.inflate(R.layout.fragment_chat, container, false);
         return rootView;
-    }
-    public void onClick(View View) {
-        //Toast.makeText(getActivity(),"Message", Toast.LENGTH_SHORT).show();
-        Log.d("key value", "blah");
-        //Map<String, Object> map = new HashMap<String, Object>();
-        //temp_key = root.push().getKey();
-        //root.updateChildren(map);
 
-        //DatabaseReference message_root =root.child(temp_key);
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        map.put("name", "kevin");
-//        map.put("msg", input_msg.getText().toString());
 
-       // message_root.updateChildren(map);
     }
 
-    private void request_user_name(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-        builder.setTitle("Enter name:");
-        final EditText input_field = new EditText(this.getActivity());
+    @Override
+    public void onOpen(Room room) {
+        System.out.println("Connected to room");
+    }
 
-        builder.setView(input_field);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                name = input_field.getText().toString();
+    @Override
+    public void onOpenFailure(Room room, Exception ex) {
+        System.err.println(ex);
+    }
+
+    @Override
+    public void onMessage(Room room, final JsonNode json, final Member member) {
+            Log.d("inside", "onMEssage!");
+;            // To transform the raw JsonNode into a POJO we can use an ObjectMapper
+            final ObjectMapper mapper = new ObjectMapper();
+            try {
+                // member.clientData is a MemberData object, let's parse it as such
+                final MemberData data = mapper.treeToValue(member.getClientData(), MemberData.class);
+                // if the clientID of the message sender is the same as our's it was sent by us
+                boolean belongsToCurrentUser = member.getId().equals(scaledrone.getClientID());
+                // since the message body is a simple string in our case we can use json.asText() to parse it as such
+                // if it was instead an object we could use a similar pattern to data parsing
+                final Message message = new Message(json.asText(), data, belongsToCurrentUser);
+//                runOnUiThread (new Runnable() {
+//                    @Override
+//                    public void run() {
+                        messageAdapter.add(message);
+                        messagesView.setAdapter(messageAdapter);
+                        // scroll the ListView to the last added element
+                        messagesView.setSelection(messagesView.getCount() - 1);
+//                    }
+//                });
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
             }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-                request_user_name();
-            }
-        });
-        builder.show();
     }
+
+    private String getRandomName() {
+        String[] adjs = {"autumn", "hidden", "bitter", "misty", "silent", "empty", "dry", "dark", "summer", "icy", "delicate", "quiet", "white", "cool", "spring", "winter", "patient", "twilight", "dawn", "crimson", "wispy", "weathered", "blue", "billowing", "broken", "cold", "damp", "falling", "frosty", "green", "long", "late", "lingering", "bold", "little", "morning", "muddy", "old", "red", "rough", "still", "small", "sparkling", "throbbing", "shy", "wandering", "withered", "wild", "black", "young", "holy", "solitary", "fragrant", "aged", "snowy", "proud", "floral", "restless", "divine", "polished", "ancient", "purple", "lively", "nameless"};
+        String[] nouns = {"waterfall", "river", "breeze", "moon", "rain", "wind", "sea", "morning", "snow", "lake", "sunset", "pine", "shadow", "leaf", "dawn", "glitter", "forest", "hill", "cloud", "meadow", "sun", "glade", "bird", "brook", "butterfly", "bush", "dew", "dust", "field", "fire", "flower", "firefly", "feather", "grass", "haze", "mountain", "night", "pond", "darkness", "snowflake", "silence", "sound", "sky", "shape", "surf", "thunder", "violet", "water", "wildflower", "wave", "water", "resonance", "sun", "wood", "dream", "cherry", "tree", "fog", "frost", "voice", "paper", "frog", "smoke", "star"};
+        return (
+                adjs[(int) Math.floor(Math.random() * adjs.length)] +
+                        "_" +
+                        nouns[(int) Math.floor(Math.random() * nouns.length)]
+        );
+    }
+
+    private String getRandomColor() {
+        Random r = new Random();
+        StringBuffer sb = new StringBuffer("#");
+        while(sb.length() < 7){
+            sb.append(Integer.toHexString(r.nextInt()));
+        }
+        return sb.toString().substring(0, 7);
+    }
+
+    // Message.java
+    public class Message {
+        private String text; // message body
+        private MemberData data; // data of the user that sent this message
+        private boolean belongsToCurrentUser; // is this message sent by us?
+
+        public Message(String text, MemberData data, boolean belongsToCurrentUser) {
+            this.text = text;
+            this.data = data;
+            this.belongsToCurrentUser = belongsToCurrentUser;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public MemberData getData() {
+            return data;
+        }
+
+        public boolean isBelongsToCurrentUser() {
+            return belongsToCurrentUser;
+        }
+    }
+
+
+    public class MessageAdapter extends BaseAdapter {
+
+        List<Message> messages = new ArrayList<Message>();
+        Context context;
+
+        public MessageAdapter(Context context) {
+            this.context = context;
+        }
+
+        public void add(Message message) {
+            this.messages.add(message);
+            notifyDataSetChanged(); // to render the list we need to notify
+        }
+
+        @Override
+        public int getCount() {
+            return messages.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return messages.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+        // This is the backbone of the class, it handles the creation of single ListView row (chat bubble)
+        @Override
+        public View getView(int i, View convertView, ViewGroup viewGroup) {
+            MessageViewHolder holder = new MessageViewHolder();
+            LayoutInflater messageInflater = (LayoutInflater) context.getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+            Message message = messages.get(i);
+
+            if (message.isBelongsToCurrentUser()) { // this message was sent by us so let's create a basic chat bubble on the right
+                convertView = messageInflater.inflate(R.layout.my_message, null);
+                holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
+                convertView.setTag(holder);
+                holder.messageBody.setText(message.getText());
+            } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
+                convertView = messageInflater.inflate(R.layout.their_message, null);
+                holder.avatar = (View) convertView.findViewById(R.id.avatar);
+                holder.name = (TextView) convertView.findViewById(R.id.name);
+                holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
+                convertView.setTag(holder);
+
+                holder.name.setText(message.getData().getName());
+                holder.messageBody.setText(message.getText());
+                GradientDrawable drawable = (GradientDrawable) holder.avatar.getBackground();
+                drawable.setColor(Color.parseColor(message.getData().getColor()));
+            }
+
+            return convertView;
+        }
+
+    }
+
+    class MessageViewHolder {
+        public View avatar;
+        public TextView name;
+        public TextView messageBody;
+    }
+
+
 
 }
