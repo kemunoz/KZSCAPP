@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +24,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +40,7 @@ import java.util.Map;
 public class ChatFragment extends Fragment implements View.OnClickListener {
     private ImageButton btn_send_msg;
     private EditText input_msg;
-    private TextView chat_conversation;
+    private ListView chat_conversation;
     private String user_name;
     private String name = "";
     private DatabaseReference root;
@@ -67,7 +73,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         btn_send_msg = (ImageButton) rootView.findViewById(R.id.imageButton);
         input_msg = (EditText) rootView.findViewById(R.id.input_msg);
-        chat_conversation = (TextView) rootView.findViewById(R.id.chat_conversation);
+        chat_conversation = (ListView) rootView.findViewById(R.id.chat_conversation);
        root = FirebaseDatabase.getInstance().getReference().child("kzsc-3c2de");
        request_user_name();
 //       if(n==0) {
@@ -99,27 +105,44 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-        root.addChildEventListener(new ChildEventListener() {
+//        root.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//
+//                append_chat_conversation(dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                append_chat_conversation(dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+        root.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                append_chat_conversation(dataSnapshot);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                append_chat_conversation(dataSnapshot);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> lol = new ArrayList<String>();
+                for (DataSnapshot item_snapshot : dataSnapshot.getChildren()) {
+                    Log.d("ITEM", item_snapshot.child("msg").getValue().toString());
+                    lol.add(item_snapshot.child("msg").getValue().toString());
+                }
+                ListAdapter listAd = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, lol);
+                chat_conversation.setAdapter(listAd);
             }
 
             @Override
@@ -133,16 +156,18 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
     private String chat_msg, chat_user_name;
     private void append_chat_conversation(DataSnapshot dataSnapshot) {
+//        Iterator i = dataSnapshot.getChildren().iterator();
+//        List<String> lol = new ArrayList<String>();
+//        while(i.hasNext()){
+//
+//            chat_msg = (String) ((DataSnapshot)i.next()).getValue();
+//            chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
+//            lol.add(chat_msg);
+////        }
+//        }
 
-        Iterator i = dataSnapshot.getChildren().iterator();
-
-        while(i.hasNext()){
-
-            chat_msg = (String) ((DataSnapshot)i.next()).getValue();
-            chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
-
-            chat_conversation.append(chat_user_name + ": "+ chat_msg+ "\n");
-        }
+ //       ListAdapter listAd = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, lol);
+ //       chat_conversation.setAdapter(listAd);
     }
 
     public void onClick(View View) {
