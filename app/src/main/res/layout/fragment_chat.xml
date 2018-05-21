@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="459dp"
         android:layout_alignParentTop="true"
+        android:layoutDirection="rtl"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"/>
 

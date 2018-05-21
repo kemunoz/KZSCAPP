@@ -141,7 +141,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     Log.d("ITEM", item_snapshot.child("msg").getValue().toString());
                     lol.add(item_snapshot.child("msg").getValue().toString());
                 }
-                ListAdapter listAd = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, lol);
+                //ListAdapter listAd = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, lol);
+                ListAdapter listAd = new CustomAdapter(getActivity(), lol);
                 chat_conversation.setAdapter(listAd);
             }
 
