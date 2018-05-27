@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/KZSC_Radio.iml" filepath="$PROJECT_DIR$/KZSC_Radio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RadioApp.iml" filepath="$PROJECT_DIR$/RadioApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

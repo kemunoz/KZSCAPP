@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private String temp_key;
     private float n = 0;
     private int l =0;
+    private String DJSecretKey = "IAmTheDJ";
+    private boolean isDJ = false;
 
     /*public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,9 +141,20 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> lol = new ArrayList<String>();
+                JSONObject J = new JSONObject();
                 for (DataSnapshot item_snapshot : dataSnapshot.getChildren()) {
                     Log.d("ITEM", item_snapshot.child("msg").getValue().toString());
-                    lol.add(item_snapshot.child("msg").getValue().toString());
+                    String nameForJSON = item_snapshot.child("name").getValue().toString();
+                    Toast.makeText(getActivity(),nameForJSON ,Toast.LENGTH_SHORT).show();
+                    String messageForJSON = item_snapshot.child("msg").getValue().toString();
+                    try {
+                        J.put("name", nameForJSON);
+                        J.put("msg", messageForJSON);
+                        J.put("isDJ", isDJ);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    lol.add(J.toString());
                 }
                 //ListAdapter listAd = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, lol);
                 ListAdapter listAd = new CustomAdapter(getActivity(), lol);
@@ -196,10 +211,16 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 name = input_field.getText().toString();
+
                 //Toast.makeText(getActivity(),"outside " + name,Toast.LENGTH_LONG).show();
                 if (name.equals("")) {
                     //Toast.makeText(getActivity(),"blah",Toast.LENGTH_LONG).show();
                     request_user_name();
+                }
+
+                if (name.equals(DJSecretKey)) {
+                    Toast.makeText(getActivity(),"Look at me! I am the DJ Now!",Toast.LENGTH_LONG).show();
+                    isDJ = true;
                 }
             }
         });
