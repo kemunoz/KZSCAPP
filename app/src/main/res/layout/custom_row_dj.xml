@@ -7,24 +7,24 @@
     android:orientation="vertical"
     android:paddingTop="5dp">
 
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="103dp"
-        android:layout_height="58dp"
-        android:paddingTop="5dp"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="16dp" />
+    <!--<TextView-->
+        <!--android:id="@+id/textNameDJ"-->
+        <!--android:layout_width="103dp"-->
+        <!--android:layout_height="58dp"-->
+        <!--android:paddingTop="5dp"-->
+        <!--android:text=""-->
+        <!--tools:layout_editor_absoluteX="132dp"-->
+        <!--tools:layout_editor_absoluteY="16dp" />-->
 
     <TextView
-        android:id="@+id/textviewCustom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/textviewCustomDJ"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/chatbubble"
+        android:background="@drawable/djbubble_2"
         android:text=""
-        android:textColor="#ffffff"
+        android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/textName"
-        tools:layout_editor_absoluteX="132dp" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 </android.support.constraint.ConstraintLayout>
