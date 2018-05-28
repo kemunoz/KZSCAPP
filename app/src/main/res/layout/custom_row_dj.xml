@@ -7,24 +7,24 @@
     android:orientation="vertical"
     android:paddingTop="5dp">
 
-    <!--<TextView-->
-        <!--android:id="@+id/textNameDJ"-->
-        <!--android:layout_width="103dp"-->
-        <!--android:layout_height="58dp"-->
-        <!--android:paddingTop="5dp"-->
-        <!--android:text=""-->
-        <!--tools:layout_editor_absoluteX="132dp"-->
-        <!--tools:layout_editor_absoluteY="16dp" />-->
+    <TextView
+        android:id="@+id/textNameDJ"
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:paddingTop="5dp"
+        android:text=""
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
         android:id="@+id/textviewCustomDJ"
-        android:layout_width="89dp"
-        android:layout_height="94dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/djbubble_2"
         android:text=""
         android:textColor="#000000"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="51dp" />
 </android.support.constraint.ConstraintLayout>

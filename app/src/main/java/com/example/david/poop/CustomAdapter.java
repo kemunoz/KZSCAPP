@@ -47,8 +47,8 @@ class CustomAdapter extends ArrayAdapter<String>{
             TextView textMessage = (TextView) customView.findViewById(R.id.textviewCustomDJ);
             textMessage.setText(json.get("msg").toString());
             Log.d("MSG", textMessage.getText().toString());
-//            TextView nameMessage = (TextView) customView.findViewById(R.id.textNameDJ);
-//            nameMessage.setText("From  " + json.get("name").toString() + ": ");
+            TextView nameMessage = (TextView) customView.findViewById(R.id.textNameDJ);
+            nameMessage.setText("From  " + json.get("name").toString() + ": ");
         }
         return  customView;
     }
