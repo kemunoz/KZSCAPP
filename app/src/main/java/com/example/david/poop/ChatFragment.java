@@ -1,6 +1,8 @@
 package com.example.david.poop;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,6 +53,8 @@ public class ChatFragment extends Fragment {
     private int l =0;
     private String DJSecretKey = "DJ";
     private String isDJ = "False";
+    private Context mContext;
+    private Activity a;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         savedInstanceState = new Bundle();
@@ -65,7 +69,6 @@ public class ChatFragment extends Fragment {
         btn_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("key value", "blah");
                 Map<String, Object> map = new HashMap<String, Object>();
                 temp_key = root.push().getKey();
                 root.updateChildren(map);
@@ -74,19 +77,20 @@ public class ChatFragment extends Fragment {
                 Map<String, Object> map2 = new HashMap<String, Object>();
                 map2.put("name", name);
                 map2.put("msg", input_msg.getText().toString());
-
                 message_root.updateChildren(map2);
-
             }
         });
 
+        /////////////////////////////////////////////////////////////
+        // Look at different event listener for updating database! //
+        /////////////////////////////////////////////////////////////
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> lol = new ArrayList<String>();
                 JSONObject J = new JSONObject();
                 for (DataSnapshot item_snapshot : dataSnapshot.getChildren()) {
-                    Log.d("ITEM", item_snapshot.child("msg").getValue().toString());
+//                    Log.d("ITEM", item_snapshot.child("msg").getValue().toString());
                     String nameForJSON = item_snapshot.child("name").getValue().toString();
                     if (nameForJSON.equals(DJSecretKey)) {
                         isDJ = "True";
@@ -105,8 +109,12 @@ public class ChatFragment extends Fragment {
                     lol.add(J.toString());
                 }
                 //ListAdapter listAd = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, lol);
-                ListAdapter listAd = new CustomAdapter(getActivity(), lol);
-                chat_conversation.setAdapter(listAd);
+//                Log.d("TEST", "BEFORE SEND MESSAGE");
+                if (mContext != null) {
+                    ListAdapter listAd = new CustomAdapter(mContext, lol);
+                    chat_conversation.setAdapter(listAd);
+                }
+//                Log.d("TEST", "AFTER SEND MESSAGE");
             }
 
             @Override
@@ -115,9 +123,66 @@ public class ChatFragment extends Fragment {
             }
         });
 
+//        root.addChildEventListener(new ChildEventListener() {
+//
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                        update_screen(dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         return rootView;
     }
+
+//    private void update_screen(DataSnapshot dataSnapshot) {
+//
+//        Iterator i = dataSnapshot.getChildren().iterator();
+//        List<String> lol = new ArrayList<String>();
+//        JSONObject J = new JSONObject();
+//        String nameForJSON = "";
+//        String messageForJSON = "";
+//        while(i.hasNext()) {
+//            nameForJSON = (String) ((DataSnapshot)i.next()).getValue();
+//            if (nameForJSON.equals(DJSecretKey)) {
+//                        isDJ = "True";
+//                    }
+//                    else {
+//                        isDJ = "False";
+//                    }
+//                     messageForJSON = (String) ((DataSnapshot)i.next()).getValue();
+//                    try {
+//                        J.put("name", nameForJSON);
+//                        J.put("msg", messageForJSON);
+//                        J.put("isDJ", isDJ);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    lol.add(J.toString());
+//                }
+//        //ListAdapter listAd = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, lol);
+//        ListAdapter listAd = new CustomAdapter(getActivity(), lol);
+//        chat_conversation.setAdapter(listAd);
+//    }
 
     private void request_user_name(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
@@ -146,4 +211,18 @@ public class ChatFragment extends Fragment {
         builder.show();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        if (context instanceof Activity){
+            a = (Activity) context;
+        }
+
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
+    }
 }
