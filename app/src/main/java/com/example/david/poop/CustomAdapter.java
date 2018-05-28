@@ -43,7 +43,7 @@ class CustomAdapter extends ArrayAdapter<String>{
                 TextView textMessage = (TextView) customView.findViewById(R.id.textviewCustom);
                 TextView nameMessage = (TextView) customView.findViewById(R.id.textName);
                 textMessage.setText(json.get("msg").toString());
-                nameMessage.setText("From  " + json.get("name").toString() + ": ");
+                nameMessage.setText("From  " + json.get("name").toString() + ":     ");
             }
             //The particular entry is from the DJ
             else {
