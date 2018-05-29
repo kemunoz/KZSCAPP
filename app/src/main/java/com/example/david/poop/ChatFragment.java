@@ -57,14 +57,14 @@ public class ChatFragment extends Fragment {
     private Activity a;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        savedInstanceState = new Bundle();
-        savedInstanceState.putFloat("rn", n);
+        name = getArguments().getString("nickname");
+        //Toast.makeText(getActivity(),"name is " + name, Toast.LENGTH_LONG).show();
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         btn_send_msg = (ImageButton) rootView.findViewById(R.id.imageButton);
         input_msg = (EditText) rootView.findViewById(R.id.input_msg);
         chat_conversation = (ListView) rootView.findViewById(R.id.chat_conversation);
        root = FirebaseDatabase.getInstance().getReference().child("kzsc-3c2de");
-       request_user_name();
+       //request_user_name();
 
         btn_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +106,6 @@ public class ChatFragment extends Fragment {
                     }
                     lol.add(J.toString());
                 }
-                //ListAdapter listAd = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, lol);
                 if (mContext != null) {
                     ListAdapter listAd = new CustomAdapter(mContext, lol);
                     chat_conversation.setAdapter(listAd);
@@ -120,33 +119,6 @@ public class ChatFragment extends Fragment {
             }
         });
         return rootView;
-    }
-
-    private void request_user_name(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-        builder.setTitle("Enter name:");
-        final EditText input_field = new EditText(this.getActivity());
-
-        builder.setView(input_field);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                name = input_field.getText().toString();
-                //Toast.makeText(getActivity(),"outside " + name,Toast.LENGTH_LONG).show();
-                if (name.equals("")) {
-                    //Toast.makeText(getActivity(),"blah",Toast.LENGTH_LONG).show();
-                    request_user_name();
-                }
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-                request_user_name();
-            }
-        });
-        builder.show();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.david.poop;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -18,11 +20,13 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        intent = new Intent(MainActivity.this, Activity.class);
 
         setTitle("KZSC App");
 
@@ -54,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new HomeFragment();
                             break;
                         case R.id.nav_chat:
-                            selectedFragment = new ChatFragment();
+                            //Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//                            return true;
+                            selectedFragment = new LoginFragment();
                             break;
                         case R.id.nav_schedule:
                             selectedFragment = new ScheduleFragment();
