@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new LoginFragment();
                             break;
                         case R.id.nav_schedule:
+                            //selectedFragment = new ScheduleFragment();
                             selectedFragment = new ScheduleFragment();
                             break;
                         case R.id.nav_about:
