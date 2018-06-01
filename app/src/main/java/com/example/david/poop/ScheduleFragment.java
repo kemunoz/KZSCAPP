@@ -1,13 +1,16 @@
 package com.example.david.poop;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,28 +25,33 @@ import java.io.IOException;
 public class ScheduleFragment extends Fragment {
 
     private WebView myWebView;
-    private static final String MY_WEBPAGE = "https://www.kzsc.org/schedule";
+    private static final String MY_WEBPAGE = "https://spinitron.com/radio/playlist.php?station=kzsc&show=schedule" +
+            "&ptype=d&css=https://www.kzsc.org/wp-content/plugins/kzsc-spinitron/css/spinitron.css";
     private Exception e = null;
 
 
     private class RetrieveFeedTask extends AsyncTask {
         @Override
         protected Object doInBackground(Object[] objects) {
-            Document doc = null;
-            try {
-                doc = Jsoup.connect(MY_WEBPAGE).get();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            final Element title = doc.body();
-            Log.d("TITLE", title.toString());
-            //Elements ele = doc.select("div#middle");
-            //final String html = ele.toString();
-            //Log.d("TITLE", "before fuck off");
+//            Document doc = null;
+//            try {
+//                doc = Jsoup.connect(MY_WEBPAGE).get();
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
+//            Log.d("TITLE", title.toString());
+//            Elements scheduleDiv = doc.select("div#bigscheddiv");
+//
+//            for (Element e : scheduleDiv) {
+//
+//            }
+//            final String html = scheduleDiv.toString();
+//            Log.d("TITLE", "before fuck off");
 //            Log.d("TITLE", html);
-            Log.d("TITLE", "after fuck off");
-            final String mime = "text/html";
-            final String encoding = "utf-8";
+//            Log.d("TITLE", "after fuck off");
+//            final String html = doc.getElementById("main").outerHtml();
+//            final String mime = "text/html";
+//            final String encoding = "utf-8";
             myWebView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -55,10 +63,19 @@ public class ScheduleFragment extends Fragment {
                     myWebView.getSettings().setDatabaseEnabled(true);
                     myWebView.getSettings().setAppCacheEnabled(true);
                     myWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-                    //myWebView.loadUrl(MY_WEBPAGE);
+                    myWebView.getSettings().setLoadWithOverviewMode(true);
+                    myWebView.getSettings().setUseWideViewPort(true);
+                    myWebView.getSettings().setBuiltInZoomControls(true);
+                    myWebView.loadUrl(MY_WEBPAGE);
                     //myWebView.loadData(html, mime, encoding);
-                    myWebView.loadDataWithBaseURL(MY_WEBPAGE, title.toString(), mime, encoding, MY_WEBPAGE);
-                    myWebView.setWebViewClient(new WebViewClient());
+                    //myWebView.loadDataWithBaseURL(MY_WEBPAGE, html, mime, encoding, MY_WEBPAGE);
+//                    myWebView.setWebViewClient(new WebViewClient());
+                    myWebView.setWebViewClient(new WebViewClient() {
+                        public boolean shouldOverrideUrlLoading (WebView view, String url){
+                            //True if the host application wants to leave the current WebView and handle the url itself, otherwise return false.
+                            return true;
+                        }
+                    });
                 }
             });
             return null;
