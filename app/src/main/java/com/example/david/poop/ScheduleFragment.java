@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
+import android.widget.ProgressBar;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,6 +30,7 @@ public class ScheduleFragment extends Fragment {
     private static final String MY_WEBPAGE = "https://spinitron.com/radio/playlist.php?station=kzsc&show=schedule" +
             "&ptype=d&css=https://www.kzsc.org/wp-content/plugins/kzsc-spinitron/css/spinitron.css";
     private Exception e = null;
+    private ProgressBar progressBar;
 
 
     private class RetrieveFeedTask extends AsyncTask {
@@ -67,10 +70,16 @@ public class ScheduleFragment extends Fragment {
                     myWebView.getSettings().setUseWideViewPort(true);
                     myWebView.getSettings().setBuiltInZoomControls(true);
                     myWebView.loadUrl(MY_WEBPAGE);
+//                    progressBar.setVisibility(View.GONE);
                     //myWebView.loadData(html, mime, encoding);
                     //myWebView.loadDataWithBaseURL(MY_WEBPAGE, html, mime, encoding, MY_WEBPAGE);
 //                    myWebView.setWebViewClient(new WebViewClient());
                     myWebView.setWebViewClient(new WebViewClient() {
+                        public void onPageFinished(WebView view, String url) {
+                            super.onPageFinished(view, url);
+                            progressBar.setVisibility(View.GONE);
+
+                        }
                         public boolean shouldOverrideUrlLoading (WebView view, String url){
                             //True if the host application wants to leave the current WebView and handle the url itself, otherwise return false.
                             return true;
@@ -86,6 +95,8 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState){
         View rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.loadingPanel);
+        progressBar.setVisibility(View.VISIBLE);
         myWebView = (WebView) rootView.findViewById(R.id.webView);
         backgroundProcess = new RetrieveFeedTask();
         Object array[] = {rootView};
