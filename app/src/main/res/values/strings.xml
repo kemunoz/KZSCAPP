@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Navigation App</string>
+    <string name="app_name">KZSC Radio</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="title_activity_login">Sign in</string>
@@ -16,6 +16,18 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+
+    <string name="tab_text_1">Purpose</string>
+    <string name="tab_text_2">Mission Statement</string>
+    <string name="tab_text_3">Contact</string>
+    <string name="action_settings">Settings</string>
+    <string name="mission">     KZSC is a non-commercial, educational public radio station licensed by the Federal Communications Commission (FCC) to the University of California. The station’s responsibilities are to both the license grantor and license holder</string>
+    <string name="mission2">    The station’s responsibility to the UC Regents is to serve as a training ground for UC Santa Cruz students wishing to pursue a professional career or a vocational activity in the broadcast industry. The station is also obligated by the FCC to operate as a public service to Santa Cruz, San Benito, and Monterey county audiences, offering programming in “the public interest.”</string>
+    <string name="mission3">    KZSC is dedicated to airing alternative viewpoints that often differ from the broadcasts found on many commercial stations. Our creative and educational endeavors will be guided by honesty, balance and sensitivity.</string>
+    <string name="mission4">    KZSC is committed to soliciting and providing access in a non- discriminatory, progressive fashion to those traditionally underrepresented in the media. This includes, but is not limited to, women, cultural, ethnic and racial minorities, people of various sexual orientations, seniors, youth, children and the disabled.</string>
+    <string name="mission5">    KZSC staff shall at all times strive for completeness in news coverage. The station shall strive conscientiously for unbiased and fair reporting on all events and topics.</string>
+    <string name="mission6">    With the exception of FCC and University rules, KZSC shall not allow any censorship (“prior restraint”) in program content by any agency outside of the station (refer to FCC policies and the UCSC Rule book.)</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

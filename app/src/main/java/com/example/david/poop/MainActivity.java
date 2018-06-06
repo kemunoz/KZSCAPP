@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("KZSC App");
+//        setTitle("KZSC App");
 
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListner);
@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item){
                     Fragment selectedFragment=null;
-
                     switch(item.getItemId()){
                         case R.id.nav_home:
                             selectedFragment = new HomeFragment();

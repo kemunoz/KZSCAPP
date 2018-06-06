@@ -90,7 +90,7 @@ public class ScheduleFragment extends Fragment {
             return null;
         }
     }
-    private RetrieveFeedTask backgroundProcess = null;
+    public RetrieveFeedTask backgroundProcess = null;
 
     public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState){
