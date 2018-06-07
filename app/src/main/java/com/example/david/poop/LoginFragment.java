@@ -1,6 +1,7 @@
 package com.example.david.poop;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,6 +52,7 @@ public class LoginFragment extends Fragment {
         prompt.setEnabled(false);
 
         mConnectButton = (Button) rootView.findViewById(R.id.button_login_connect);
+        mConnectButton.setBackgroundColor(Color.BLACK);
         mConnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
